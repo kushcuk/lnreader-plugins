@@ -1,0 +1,33 @@
+import { fetchApi } from '@libs/fetch';
+import { Plugin } from '@/types/plugin';
+import { load as parseHTML } from 'cheerio';
+import { defaultCover } from '@libs/defaultCover';
+import { NovelStatus } from '@libs/novelStatus';
+
+// Site : https://cgtranslations.me  (WordPress.com blog)
+// Site has no novel catalogue: every "novel" is a directory page that
+// lists links to dated blog posts (= chapters). So the novel list is static.
+
+type Series = { name: string; path: string; cover?: string };
+
+const SERIES: Series[] = [
+  {
+    name: 'Konosuba: Main Series (Light Novel)',
+    path: '/konosuba/',
+    cover: 'https://cgtranslations.me/wp-content/uploads/2019/07/rerecover.png',
+  },
+  { name: 'Konosuba: Short Stories', path: '/misc-short-stories/' },
+  { name: 'Konosuba: Yorimichi', path: '/konosuba-yorimichi/' },
+  { name: 'Konosuba: Dust Spinoff', path: '/dustspinoff/' },
+  { name: 'Konosuba: Masked Spinoff', path: '/masked-spinoff/' },
+  { name: 'Konosuba: Explosions Spinoff', path: '/explosions-spinoff/' },
+  { name: 'Konosuba: Misc', path: '/konosuba-misc/' },
+  { name: 'Neptunia', path: '/neptunia/' },
+  { name: 'Fairy Fencer F', path: '/fairy-fencer-f/' },
+  {
+    name: 'Imouto sae Ireba Ii: BD Extra Scenes',
+    path: '/imouto-sae-ireba-ii-bd-extra-scenes/',
+  },
+];
+
+// Only links that point to a dated post (/YYYY/MM/DD/slug/) or /?p=123
